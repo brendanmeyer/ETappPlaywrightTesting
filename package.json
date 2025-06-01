@@ -7,10 +7,13 @@
     "type": "commonjs",
     "main": "index.js",
     "scripts": {
-        "test": "npx playwright test --ui",
-        "setup": "npx playwright install"
+        "test": "npx playwright test --ui --headed",
+        "setup": "npx playwright install",
+        "clean": "rimraf ./playwright/.auth"
     },
     "devDependencies": {
-        "@playwright/test": "^1.52.0"
+        "@playwright/test": "^1.52.0",
+        "@types/node": "^22.15.29",
+        "rimraf": "^6.0.1"
     }
 }
