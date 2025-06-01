@@ -1,0 +1,16 @@
+{
+    "name": "etappplaywrighttesting",
+    "version": "1.0.0",
+    "description": "ET App Testing",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "npx playwright test --ui",
+        "setup": "npx playwright install"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.52.0"
+    }
+}
