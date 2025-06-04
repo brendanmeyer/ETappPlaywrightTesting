@@ -102,17 +102,24 @@ test('check layout - new ET - system UniLodge', async ({ page }) => {
     await expect(page.getByRole('textbox', { name: 'BookingID' })).toBeVisible();
 });
 
-// test('create ANU ET', async ({ page }) => {
-//     await page.goto(config.appUrl);
-//     await expect(page.getByText('Rows:')).toHaveText('Rows: 0');
+test('create ANU ET', async ({ page }) => {
+    await page.goto(config.appUrl);
+    await expect(page.getByText('Rows:')).toHaveText('Rows: 0');
 
-//     await page.getByRole('menuitem', { name: 'New', exact: true }).click();
-//     await page.getByRole('combobox', { name: 'StarRez System' }).click();
-//     await page.getByRole('option', { name: 'ANU' }).click();
-//     await page.getByRole('textbox', { name: 'ANU EntryID' }).fill('284623');
-//     await page.getByRole('textbox', { name: 'BookingID' }).fill('236560');
-//     await expect(page.getByText('StarRez System')).toHaveText('ANU');
-//     await expect(page.getByText('ANU EntryID')).toHaveText('284623');
-//     await expect(page.getByText('BookingID')).toHaveText('284623');
-// });
+    await page.getByRole('menuitem', { name: 'New', exact: true }).click();
+    await expect(page.getByRole('region', { name: 'StarRez' })).toBeVisible();
+    const etIdDiv = page.locator('div').filter({ hasText: /^---ET ID$/ }).locator('div').first().elementHandle();
+    await expect(etIdDiv?.textContent).toMatch(/^---ET ID$/);
+    await page.getByRole('combobox', { name: 'StarRez System' }).click();
+    await page.getByRole('option', { name: 'ANU' }).click();
+    await page.getByRole('textbox', { name: 'ANU EntryID' }).fill('284623');
+    await page.getByRole('textbox', { name: 'BookingID' }).fill('236560');
+    await expect(page.getByRole('combobox', { name: 'StarRez System' })).toHaveText('ANU');
+    await expect(page.getByRole('textbox', { name: 'ANU EntryID' })).toHaveValue('284623');
+    await expect(page.getByRole('textbox', { name: 'BookingID' })).toHaveValue('236560');
+    await page.getByRole('tab', { name: 'General' }).click();
+    await page.getByText('Saving...', { exact: true }).waitFor({ timeout: 10000 });
+    await expect(etIdDiv?.textContent).toMatch(/^ET-\d+$/);
+    await page.waitForTimeout(10000);
+});
 
