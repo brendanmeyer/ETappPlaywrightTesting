@@ -1,0 +1,6 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+    await page.goto('https://login.microsoftonline.com/e37d725c-ab5c-4624-9ae5-f0533e486437/oauth2/authorize?client_id=00000007-0000-0000-c000-000000000000&response_type=code%20id_token&scope=openid%20profile&state=OpenIdConnect.AuthenticationProperties%3DMAAAAB28F5grZBHwmkMAIkgVNU6HAMIA5bVYOgKkRYtKW1h6RnA2WnjCyTQk_HCUhTuxzgEAAAABAAAACS5yZWRpcmVjdFpodHRwczovL29yZzEzYWJjNzRmLmNybTYuZHluYW1pY3MuY29tL21haW4uYXNweD9hcHBpZD02OTgxNmE5Ni0yZjlmLWVlMTEtYmUzNy02MDQ1YmQzZDQwMmY%26RedirectTo%3DMAAAAB28F5grZBHwmkMAIkgVNU64csam8sLS5gt8smbG%252bpIg4H3%252fNNpgS3GpI92mjupFz2h0dHBzOi8vb3JnMTNhYmM3NGYuY3JtNi5keW5hbWljcy5jb20v%26RedirectToForMcas%3Dhttps%253a%252f%252forg13abc74f.crm6.dynamics.com%252fmain.aspx%253fappid%253d69816a96-2f9f-ee11-be37-6045bd3d402f&response_mode=form_post&nonce=638844641643506614.YzY3ZjgyOTItMzE4OS00ZmVkLTlkMzgtYmRkNDY3MzliNDRkZTljYjhiYTctN2UwMC00NDIzLThmMTUtMzNlZTEwMWVlMTkz&redirect_uri=https%3A%2F%2Fmel--ocecrmlivesg614.crm6.dynamics.com%2F&max_age=86400&claims=%7B%22id_token%22%3A%7B%22xms_cc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&x-client-SKU=ID_NET472&x-client-ver=8.3.0.0&sso_reload=true');
+    await expect(page.getByText('Rows:')).toBeVisible();
+});

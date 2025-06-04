@@ -34,9 +34,30 @@ export default defineConfig({
 
     /* Configure projects for major browsers */
     projects: [
-        { name: 'setup-chromium', testMatch: /.*\.setup\.ts/ },
-        { name: 'setup-firefox', testMatch: /.*\.setup\.ts/ },
-        { name: 'setup-webkit', testMatch: /.*\.setup\.ts/ },
+        {
+            name: 'setup-chromium',
+            testMatch: /.*\.setup\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/chromium-user.json',
+            },
+        },
+        {
+            name: 'setup-firefox',
+            testMatch: /.*\.setup\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/chromium-user.json',
+            },
+        },
+        {
+            name: 'setup-webkit',
+            testMatch: /.*\.setup\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/chromium-user.json',
+            },
+        },
         {
             name: 'chromium',
             use: {
