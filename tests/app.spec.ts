@@ -6,6 +6,8 @@ let config = {
     appName: 'Early Terminations Administration'
 };
 
+var ETANU;
+
 test.beforeAll(async () => {
 });
 
@@ -106,20 +108,44 @@ test('create ANU ET', async ({ page }) => {
     await page.goto(config.appUrl);
     await expect(page.getByText('Rows:')).toHaveText('Rows: 0');
 
+    var etIDselector = "div[data-id='form-header'] > :nth-child(2 of div) > :nth-child(1 of div) > :nth-child(1 of div) > :nth-child(1 of div) > :nth-child(1 of div)";
+
     await page.getByRole('menuitem', { name: 'New', exact: true }).click();
     await expect(page.getByRole('region', { name: 'StarRez' })).toBeVisible();
-    const etIdDiv = page.locator('div').filter({ hasText: /^---ET ID$/ }).locator('div').first().elementHandle();
-    await expect(etIdDiv?.textContent).toMatch(/^---ET ID$/);
+    await expect(page.locator(etIDselector)).toHaveText('---');
     await page.getByRole('combobox', { name: 'StarRez System' }).click();
     await page.getByRole('option', { name: 'ANU' }).click();
     await page.getByRole('textbox', { name: 'ANU EntryID' }).fill('284623');
     await page.getByRole('textbox', { name: 'BookingID' }).fill('236560');
-    await expect(page.getByRole('combobox', { name: 'StarRez System' })).toHaveText('ANU');
     await expect(page.getByRole('textbox', { name: 'ANU EntryID' })).toHaveValue('284623');
     await expect(page.getByRole('textbox', { name: 'BookingID' })).toHaveValue('236560');
     await page.getByRole('tab', { name: 'General' }).click();
     await page.getByText('Saving...', { exact: true }).waitFor({ timeout: 10000 });
-    await expect(etIdDiv?.textContent).toMatch(/^ET-\d+$/);
-    await page.waitForTimeout(10000);
+    await page.getByText('Saving...', { exact: true }).waitFor({ timeout: 10000, state: 'hidden' });
+    await expect(page.getByRole('status', { name: 'Save status - Saved' })).toHaveText('- Saved');
+    const etIdText = await page.locator(etIDselector).innerText();
+    await expect(etIdText).toMatch(/^ET-\d+$/);
+    ETANU = etIdText;
+    // await page.waitForTimeout(10000);
+});
+
+test('create ANU ET - cant add a second of the same Entry/BookingID', async ({ page }) => {
+    await page.goto(config.appUrl);
+    await expect(page.getByText('Rows:')).toHaveText('Rows: 1');
+
+    var etIDselector = "div[data-id='form-header'] > :nth-child(2 of div) > :nth-child(1 of div) > :nth-child(1 of div) > :nth-child(1 of div) > :nth-child(1 of div)";
+
+    await page.getByRole('menuitem', { name: 'New', exact: true }).click();
+    await expect(page.getByRole('region', { name: 'StarRez' })).toBeVisible();
+    await expect(page.locator(etIDselector)).toHaveText('---');
+    await page.getByRole('combobox', { name: 'StarRez System' }).click();
+    await page.getByRole('option', { name: 'ANU' }).click();
+    await page.getByRole('textbox', { name: 'ANU EntryID' }).fill('284623');
+    await page.getByRole('textbox', { name: 'BookingID' }).fill('236560');
+    await expect(page.getByRole('textbox', { name: 'ANU EntryID' })).toHaveValue('284623');
+    await expect(page.getByRole('textbox', { name: 'BookingID' })).toHaveValue('236560');
+    await page.getByRole('tab', { name: 'General' }).click();
+    await page.getByRole('heading', { name: 'Duplicate Record' }).waitFor({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: 'Duplicate Record' })).toHaveText('Duplicate Record');
 });
 
